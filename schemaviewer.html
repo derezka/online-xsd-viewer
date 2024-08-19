@@ -437,6 +437,10 @@ input[type="checkbox"] {
   background-color: #FFFFFF;
   vertical-align: bottom;
 }
+input.button {
+  vertical-align: middle;
+  padding: 0px 5px 0px 5px;
+}
 
 input.search-text {
   cursor: text;
@@ -526,10 +530,10 @@ td.xpath {
   <fieldset id="SchemaOptions" style="display: none;">
     <label><input type="checkbox" id="cbAnnotations" onclick="AnnotationChanged();" value="1" checked> Annotations</label>
     <label><input type="checkbox" id="cbTypeInfo" onclick="TypeInfoChanged();" value="1" checked> Type Info</label>
-    &nbsp;&nbsp;&nbsp;
     <label class="search">
       <input class="search-text" id="SearchText" value=""><input class="search-button" id="SearchButton" onclick="SearchButtonPressed();" value="SEARCH" size="5" readonly><input class="search-button" id="SearchReset" onclick="SearchResetPressed();" value="RESET" size="4" readonly>
     </label>
+    <input id="downloadPngButton" onclick="DownloadPng();" class="button" size="10"  value="Download Png" readonly/>
   </fieldset>
 
   <div class="search-result" id="SearchResultDiv" style="height: 152px; overflow: scroll;">
@@ -1934,7 +1938,7 @@ td.xpath {
   var nMinHorLineLength = 20;
   var nVerNodeDistance = 12;
 	
-	var sTextDelimeters = " .,;:-+*/=<>()&%$§\"!#'[]{}´`~^°";
+	var sTextDelimeters = " .,;:-+*/=<>()&%$ï¿½\"!#'[]{}ï¿½`~^ï¿½";
 
 	var nLastClickedNodeIndex;
 	var nLastExpandedNodeIndex;
@@ -3423,6 +3427,14 @@ td.xpath {
     DrawTree();
   }
 
+  function DownloadPng(){
+    var canvas = document.getElementById("tree");
+    var image = canvas.toDataURL();
+    var aDownloadLink = document.createElement('a');
+    aDownloadLink.download = 'xsd_schema.png';
+    aDownloadLink.href = image;
+    aDownloadLink.click();
+  }
 </script>
 
 </html>
