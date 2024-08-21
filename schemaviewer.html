@@ -534,6 +534,7 @@ td.xpath {
       <input class="search-text" id="SearchText" value=""><input class="search-button" id="SearchButton" onclick="SearchButtonPressed();" value="SEARCH" size="5" readonly><input class="search-button" id="SearchReset" onclick="SearchResetPressed();" value="RESET" size="4" readonly>
     </label>
     <input id="downloadPngButton" onclick="DownloadPng();" class="button" size="10"  value="Download Png" readonly/>
+    <input id="expandAll" onclick="SetAllNodesExpanded();" class="button" size="10"  value="Expand All" readonly/>
   </fieldset>
 
   <div class="search-result" id="SearchResultDiv" style="height: 152px; overflow: scroll;">
@@ -1214,6 +1215,21 @@ td.xpath {
     }
   }
 
+  function SetNodesAllExpanded(nNodeIndex, bExpanded)
+  {
+    var firstChildIndex = Nodes[nNodeIndex].firstChildIndex;
+
+    if (firstChildIndex) {
+      Nodes[nNodeIndex].expanded = bExpanded;
+
+        var nextNodeIndex = firstChildIndex;
+
+        while (nextNodeIndex) {
+          SetNodesAllExpanded(nextNodeIndex, bExpanded);
+          nextNodeIndex = Nodes[nextNodeIndex].nextIndex;
+        }
+    }
+  }
 
   function CopyChildNodes(destNodeIndex, sourceNodeIndex)
   {
@@ -2652,7 +2668,7 @@ td.xpath {
 		return result;
 	}
 
-
+    
 	function SetVerNodePosition(nodeIndex, y)
 	{
 		var verPosition = y;
@@ -3388,6 +3404,13 @@ td.xpath {
     }
   }
 
+  function SetAllNodesExpanded()
+  {
+    SetNodesAllExpanded(rootNodeIndex, true);
+    CalcNodePositions();
+    SetCanvasSize(nSchemaWidth,  nSchemaHeight);
+    DrawTree();
+  }
 
   function SetPathExpanded(nodeIndex)
   {
