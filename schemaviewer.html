@@ -530,6 +530,7 @@ td.xpath {
   <fieldset id="SchemaOptions" style="display: none;">
     <label><input type="checkbox" id="cbAnnotations" onclick="AnnotationChanged();" value="1" checked> Annotations</label>
     <label><input type="checkbox" id="cbTypeInfo" onclick="TypeInfoChanged();" value="1" checked> Type Info</label>
+    <label><input type="checkbox" id="withBackground" onclick="withBackgroundChanged();" value="1" checked>with Background</label>
     <label class="search">
       <input class="search-text" id="SearchText" value=""><input class="search-button" id="SearchButton" onclick="SearchButtonPressed();" value="SEARCH" size="5" readonly><input class="search-button" id="SearchReset" onclick="SearchResetPressed();" value="RESET" size="4" readonly>
     </label>
@@ -1908,7 +1909,7 @@ td.xpath {
   var nShadowOffset = 4;
   var sShadowColor = "#B0B0B0"; //"#C0C0C0"; "#C8C8C8";
   //var sSelectedShadowColor = "#3030C0"; //"#FFFFB0";
-
+  var backGroundColor = "#ededed"
   var sNodeNameFont = "bold 10pt Arial"; //"bold 10pt Helvetica";"10pt Arial"
   var sNodeNameColor = "#000090"; //"#303030";
   var sNodeBackgroundColor = "#FFFFFF";
@@ -1962,10 +1963,11 @@ td.xpath {
 
   var bShowAnnotations = true;
   var bShowTypeInfo = true;
+  var bWithBackground = true;
 
   var cbAnnotations = document.getElementById("cbAnnotations");
   var cbTypeInfo = document.getElementById("cbTypeInfo");
-
+  var withBackground = document.getElementById("withBackground");
 
   function AnnotationChanged()
   {
@@ -1981,6 +1983,10 @@ td.xpath {
     DrawTree();
   }
 
+  function withBackgroundChanged() {
+    bWithBackground = withBackground.checked;
+    DrawTree();
+  }
 
   function DrawExpander(ctx, px, py, bExpanded)
   {
@@ -2668,7 +2674,7 @@ td.xpath {
 		return result;
 	}
 
-    
+
 	function SetVerNodePosition(nodeIndex, y)
 	{
 		var verPosition = y;
@@ -2892,8 +2898,12 @@ td.xpath {
     var ctx = canvas.getContext("2d");
 
     ctx.imageSmoothingEnabled = false;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (bWithBackground) {
+      ctx.fillStyle = backGroundColor;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
     //DrawSizeRuler(ctx, 5, 5, 50);
 
     DrawNode(ctx, rootNodeIndex, true);
